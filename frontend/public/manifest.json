@@ -1,0 +1,17 @@
+{
+  "short_name": "Slicey",
+  "name": "Slicey — Split expenses, not friendships",
+  "icons": [
+    { "src": "favicon.ico", "sizes": "64x64 32x32 24x24 16x16", "type": "image/x-icon" },
+    { "src": "logo192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "logo512.png", "type": "image/png", "sizes": "512x512" }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#0f0e0c",
+  "background_color": "#0f0e0c",
+  "orientation": "portrait-primary",
+  "description": "The clearest way to split expenses with friends.",
+  "categories": ["finance", "utilities"],
+  "lang": "en"
+}

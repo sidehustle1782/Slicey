@@ -1,0 +1,166 @@
+.group-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.group-detail-title-area {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+  min-width: 0;
+}
+
+.group-detail-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: var(--amber-dim);
+  color: var(--amber);
+  font-size: 22px;
+  font-weight: 700;
+  font-family: var(--font-display);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.group-detail-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 2px;
+}
+
+.balance-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+  font-size: 14px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.balance-banner--positive {
+  background: var(--green-dim);
+  border: 1px solid rgba(16,185,129,0.2);
+  color: var(--green);
+}
+.balance-banner--positive strong { color: var(--green); font-size: 16px; }
+.balance-banner--negative {
+  background: var(--red-dim);
+  border: 1px solid rgba(239,68,68,0.2);
+  color: var(--red);
+}
+.balance-banner--negative strong { color: var(--red); font-size: 16px; }
+
+.group-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--bg3);
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 24px;
+  width: fit-content;
+}
+.group-tab {
+  padding: 7px 18px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text3);
+  background: transparent;
+  transition: all var(--transition);
+  cursor: pointer;
+  text-transform: capitalize;
+}
+.group-tab--active { background: var(--surface); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+.group-tab:hover:not(.group-tab--active) { color: var(--text2); }
+
+.expense-section { margin-bottom: 24px; }
+.expense-section-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text3);
+  margin-bottom: 10px;
+  padding: 0 4px;
+}
+
+.expense-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 8px;
+  padding: 16px;
+  transition: all var(--transition);
+}
+.expense-row:hover { border-color: var(--border2); }
+.expense-row--overdue { border-color: rgba(239,68,68,0.25); }
+.expense-row--settled { opacity: 0.6; }
+
+.expense-row-emoji {
+  font-size: 22px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.expense-row-info { flex: 1; min-width: 0; }
+.expense-row-desc { font-size: 15px; font-weight: 600; }
+.expense-row-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text3);
+  margin: 4px 0 8px;
+  flex-wrap: wrap;
+}
+.expense-row-splits { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.split-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--bg3);
+  color: var(--text2);
+  border: 1px solid var(--border);
+}
+.split-chip--settled { background: var(--green-dim); color: var(--green); border-color: transparent; }
+.split-chip--me { border-color: var(--amber); color: var(--amber); }
+.split-chip--settled.split-chip--me { background: var(--green-dim); color: var(--green); border-color: transparent; }
+
+.expense-row-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.expense-row-amount { font-size: 16px; font-weight: 700; font-family: var(--font-display); }
+.expense-row-mine { font-size: 12px; }
+.expense-row-actions { display: flex; align-items: center; gap: 4px; margin-top: 4px; }
+
+.balances-section { display: flex; flex-direction: column; gap: 8px; }
+.balance-row { display: flex; align-items: center; gap: 12px; }
+
+.member-row { display: flex; align-items: center; gap: 12px; }
+
+@media (max-width: 600px) {
+  .group-detail-header { flex-wrap: wrap; }
+  .expense-row-right { min-width: 80px; }
+  .group-tabs { width: 100%; justify-content: stretch; }
+  .group-tab { flex: 1; text-align: center; }
+}

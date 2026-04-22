@@ -1,0 +1,29 @@
+.new-group-page { max-width: 600px; }
+
+.form-section-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 18px;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.add-member-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.add-member-row .input { flex: 1; }
+
+.members-list { display: flex; flex-direction: column; gap: 8px; }
+.member-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: var(--bg3);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}

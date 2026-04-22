@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>SplitEase — UI Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#0f0e0c;--bg2:#161410;--bg3:#1e1b17;--surface:#242018;--surface2:#2c2820;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--amber:#f59e0b;--amber-light:#fbbf24;--amber-dim:rgba(245,158,11,0.15);--green:#10b981;--green-dim:rgba(16,185,129,0.15);--red:#ef4444;--red-dim:rgba(239,68,68,0.15);--text:#f5f0e8;--text2:#a89f92;--text3:#6b6459;--radius:16px;--font-display:'Playfair Display',serif;--font-body:'DM Sans',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);display:flex;min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* SIDEBAR */
+.sidebar{width:240px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:20px 10px;flex-shrink:0}
+.logo{display:flex;align-items:center;gap:9px;padding:0 8px 18px}
+.logo-mark{font-size:22px;color:var(--amber)}
+.logo-text{font-family:var(--font-display);font-size:22px;font-weight:700}
+.user-row{display:flex;align-items:center;gap:10px;padding:10px 8px 14px}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--amber-dim);color:var(--amber);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.user-name{font-size:13px;font-weight:600}
+.user-email{font-size:11px;color:var(--text3)}
+.divider{height:1px;background:var(--border);margin:0 8px 10px}
+.nav-link{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;margin-bottom:2px;transition:all .15s}
+.nav-link:hover{background:var(--surface);color:var(--text)}
+.nav-link.active{background:var(--amber-dim);color:var(--amber-light)}
+.nav-icon{font-size:15px;width:18px;text-align:center}
+.nav-badge{margin-left:auto;background:var(--amber);color:#0f0e0c;font-size:10px;font-weight:700;padding:2px 6px;border-radius:20px}
+
+/* MAIN */
+.main{flex:1;overflow:hidden;display:flex;flex-direction:column}
+.page{padding:28px 24px;max-width:860px;width:100%}
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px}
+.page-title{font-family:var(--font-display);font-size:26px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px}
+.page-sub{font-size:13px;color:var(--text2)}
+
+/* SUMMARY CARDS */
+.summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:32px}
+.summary-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px}
+.sc-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:6px}
+.sc-amount{font-family:var(--font-display);font-size:26px;font-weight:700;margin-bottom:3px}
+.sc-sub{font-size:12px;color:var(--text3)}
+.green{color:#10b981}.red{color:#ef4444}.amber{color:#f59e0b}
+
+/* GROUP CARDS */
+.groups-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:28px}
+.group-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;cursor:pointer;transition:all .15s}
+.group-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.gc-head{display:flex;align-items:center;gap:11px;margin-bottom:12px}
+.gc-icon{width:40px;height:40px;border-radius:12px;background:var(--amber-dim);color:var(--amber);font-size:18px;font-weight:700;font-family:var(--font-display);display:flex;align-items:center;justify-content:center}
+.gc-name{font-size:14px;font-weight:600;margin-bottom:2px}
+.gc-meta{font-size:11px;color:var(--text3)}
+.gc-foot{display:flex;align-items:center;justify-content:space-between}
+.avatar-stack{display:flex}
+.avatar-sm{width:24px;height:24px;border-radius:50%;background:var(--amber-dim);color:var(--amber);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-left:-6px;border:2px solid var(--surface);flex-shrink:0}
+.avatar-sm:first-child{margin-left:0}
+
+/* EXPENSE LIST */
+.expense-row{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:flex-start;gap:13px;margin-bottom:8px;transition:border-color .15s}
+.expense-row:hover{border-color:var(--border2)}
+.expense-row.overdue{border-left:3px solid var(--red)}
+.er-emoji{font-size:20px;flex-shrink:0;margin-top:2px}
+.er-info{flex:1;min-width:0}
+.er-desc{font-size:14px;font-weight:600;margin-bottom:3px;display:flex;align-items:center;gap:7px}
+.er-meta{font-size:11px;color:var(--text3);display:flex;gap:6px;align-items:center;margin-bottom:7px;flex-wrap:wrap}
+.er-chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:20px;font-size:10px;font-weight:600;background:var(--bg3);color:var(--text2);border:1px solid var(--border)}
+.chip.me{border-color:var(--amber);color:var(--amber)}
+.chip.settled{background:var(--green-dim);color:var(--green);border-color:transparent}
+.er-right{text-align:right;flex-shrink:0}
+.er-amount{font-family:var(--font-display);font-size:15px;font-weight:700;margin-bottom:3px}
+.er-mine{font-size:11px}
+.er-actions{display:flex;gap:4px;justify-content:flex-end;margin-top:6px}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700}
+.badge-red{background:var(--red-dim);color:var(--red)}
+.badge-green{background:var(--green-dim);color:var(--green)}
+.badge-amber{background:var(--amber-dim);color:var(--amber-light)}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:var(--font-body);transition:all .15s}
+.btn-primary{background:var(--amber);color:#0f0e0c}
+.btn-primary:hover{background:var(--amber-light);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--surface2);color:var(--text)}
+.btn-success{background:var(--green-dim);color:var(--green);border:1px solid rgba(16,185,129,.2)}
+.btn-sm{padding:5px 12px;font-size:11px;border-radius:7px}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-overlay.open{opacity:1;pointer-events:auto}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:20px;width:100%;max-width:520px;max-height:85vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.7);transform:translateY(20px) scale(.97);transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.modal-overlay.open .modal{transform:translateY(0) scale(1)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:22px 22px 0}
+.modal-header h3{font-family:var(--font-display);font-size:19px;font-weight:700}
+.modal-body{padding:20px 22px}
+.modal-footer{padding:0 22px 22px;display:flex;gap:10px;justify-content:flex-end}
+
+/* AMOUNT INPUT */
+.amount-area{display:flex;align-items:center;background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:8px 14px;margin-bottom:18px;transition:border-color .15s}
+.amount-area:focus-within{border-color:var(--amber);box-shadow:0 0 0 3px rgba(245,158,11,.15)}
+.amount-curr{font-family:var(--font-display);font-size:26px;color:var(--text3);margin-right:5px}
+.amount-num{font-family:var(--font-display);font-size:34px;font-weight:700;color:var(--text);background:transparent;border:none;outline:none;width:100%;min-width:0}
+
+/* SPLIT TYPES */
+.split-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.split-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:11px 6px;border-radius:9px;background:var(--bg3);border:2px solid var(--border);color:var(--text2);cursor:pointer;transition:all .15s;font-family:var(--font-body)}
+.split-btn.active{border-color:var(--amber);background:var(--amber-dim);color:var(--amber-light)}
+.split-icon{font-size:16px;font-weight:700;font-family:var(--font-display)}
+.split-label{font-size:10px;font-weight:600;text-align:center}
+
+/* FIELD */
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text3)}
+.input{background:var(--bg3);border:1px solid var(--border);border-radius:9px;padding:10px 12px;font-size:13px;color:var(--text);font-family:var(--font-body);outline:none;transition:border-color .15s;width:100%}
+.input:focus{border-color:var(--amber);box-shadow:0 0 0 3px rgba(245,158,11,.15)}
+
+/* MEMBER SPLIT ROW */
+.member-row{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:9px;background:var(--bg3);border:1px solid var(--border);margin-bottom:5px}
+.check{width:20px;height:20px;border-radius:5px;background:var(--amber);border:none;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#0f0e0c;flex-shrink:0;cursor:pointer}
+.check.off{background:transparent;border:2px solid var(--border2)}
+.member-name{flex:1;font-size:12px;font-weight:500}
+.member-amt{font-size:12px;font-weight:700;color:var(--text2)}
+
+/* TABS */
+.tabs{display:flex;gap:3px;background:var(--bg3);border-radius:9px;padding:3px;margin-bottom:20px;width:fit-content}
+.tab{padding:6px 16px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text3);cursor:pointer;transition:all .15s;border:none;background:transparent;font-family:var(--font-body)}
+.tab.active{background:var(--surface);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.3)}
+
+/* BALANCE BANNER */
+.bal-banner{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-radius:12px;margin-bottom:18px;font-size:13px}
+.bal-banner.neg{background:var(--red-dim);border:1px solid rgba(239,68,68,.2);color:var(--red)}
+.bal-banner.pos{background:var(--green-dim);border:1px solid rgba(16,185,129,.2);color:var(--green)}
+
+/* NOTIFICATIONS */
+.notif-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:flex-start;gap:12px;margin-bottom:8px}
+.notif-item.unread{border-left:3px solid var(--amber);background:rgba(245,158,11,.05)}
+.notif-dot{width:8px;height:8px;border-radius:50%;background:var(--amber);flex-shrink:0;margin-top:5px}
+
+/* TIP */
+.tip{display:flex;align-items:flex-start;gap:11px;background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.15);border-radius:12px;padding:14px 16px;font-size:13px;color:var(--text2);margin-top:20px}
+
+/* SCREEN SWITCHER */
+.screen-switcher{display:flex;gap:8px;padding:16px 24px;background:var(--bg2);border-bottom:1px solid var(--border);flex-wrap:wrap}
+.screen-btn{padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-family:var(--font-body);transition:all .15s}
+.screen-btn.active{background:var(--amber);color:#0f0e0c;border-color:var(--amber)}
+
+/* SECTION TITLE */
+.section-title{font-family:var(--font-display);font-size:17px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:9px;padding:0 3px}
+
+/* LOGIN PAGE */
+.login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;position:relative;overflow:hidden;background:var(--bg);width:100%}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none}
+.orb1{width:450px;height:450px;background:radial-gradient(circle,rgba(245,158,11,.18) 0%,transparent 70%);top:-80px;right:-80px;animation:float1 8s ease-in-out infinite}
+.orb2{width:350px;height:350px;background:radial-gradient(circle,rgba(99,102,241,.12) 0%,transparent 70%);bottom:-60px;left:-60px;animation:float2 10s ease-in-out infinite}
+@keyframes float1{0%,100%{transform:translate(0,0)}50%{transform:translate(-25px,18px)}}
+@keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(18px,-25px)}}
+.login-card{background:var(--surface);border:1px solid var(--border2);border-radius:22px;padding:44px;width:100%;max-width:440px;position:relative;z-index:1;box-shadow:0 20px 70px rgba(0,0,0,.55)}
+.login-logo{display:flex;align-items:center;gap:9px;margin-bottom:28px}
+.login-headline{font-family:var(--font-display);font-size:34px;font-weight:700;line-height:1.15;margin-bottom:14px;letter-spacing:-.02em}
+.login-sub{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:26px}
+.login-features{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:30px}
+.login-feat{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text2);font-weight:500}
+.google-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:11px;padding:14px;background:var(--text);color:#1a1a1a;border-radius:11px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:var(--font-body);transition:all .15s;margin-bottom:14px}
+.google-btn:hover{background:#fff;transform:translateY(-1px);box-shadow:0 8px 20px rgba(0,0,0,.3)}
+.login-legal{font-size:11px;color:var(--text3);text-align:center;line-height:1.5}
+</style>
+</head>
+<body>
+
+<div id="app" style="display:flex;flex-direction:column;width:100%;min-height:100vh">
+  <!-- Screen switcher -->
+  <div class="screen-switcher">
+    <button class="screen-btn active" onclick="show('login')">🔐 Login</button>
+    <button class="screen-btn" onclick="show('dashboard')">⊞ Dashboard</button>
+    <button class="screen-btn" onclick="show('group')">◎ Group Detail</button>
+    <button class="screen-btn" onclick="show('addexpense')">+ Add Expense</button>
+    <button class="screen-btn" onclick="show('settle')">✓ Settle Up</button>
+    <button class="screen-btn" onclick="show('activity')">◈ Activity</button>
+    <button class="screen-btn" onclick="show('notifications')">◇ Notifications</button>
+  </div>
+
+  <!-- ===== LOGIN ===== -->
+  <div id="screen-login" style="display:flex;flex:1">
+    <div class="login-page">
+      <div class="orb orb1"></div>
+      <div class="orb orb2"></div>
+      <div class="login-card">
+        <div class="login-logo">
+          <span style="font-size:24px;color:var(--amber)">✦</span>
+          <span style="font-family:var(--font-display);font-size:24px;font-weight:700">SplitEase</span>
+        </div>
+        <h1 class="login-headline">Split expenses,<br>not friendships.</h1>
+        <p class="login-sub">The clearest way to track shared costs — no confusion, no awkwardness. Built for groups up to 30 people.</p>
+        <div class="login-features">
+          <div class="login-feat"><span style="color:var(--amber)">◈</span> Equal, %, or exact splits</div>
+          <div class="login-feat"><span style="color:var(--amber)">◎</span> Groups up to 30 people</div>
+          <div class="login-feat"><span style="color:var(--amber)">✦</span> Real-time balances</div>
+          <div class="login-feat"><span style="color:var(--amber)">◇</span> Overdue reminders</div>
+        </div>
+        <button class="google-btn">
+          <svg width="19" height="19" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Continue with Google
+        </button>
+        <p class="login-legal">By signing in you agree to our Terms of Service and Privacy Policy.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DASHBOARD ===== -->
+  <div id="screen-dashboard" style="display:none;flex:1">
+    <div style="display:flex;flex:1">
+      <div class="sidebar">
+        <div class="logo"><span class="logo-mark">✦</span><span class="logo-text">SplitEase</span></div>
+        <div class="user-row">
+          <div class="avatar" style="background:#2c2820;font-size:13px">JD</div>
+          <div><div class="user-name">Jane Doe</div><div class="user-email">jane@gmail.com</div></div>
+        </div>
+        <div class="divider"></div>
+        <div class="nav-link active"><span class="nav-icon">⊞</span>Dashboard</div>
+        <div class="nav-link"><span class="nav-icon">◎</span>Groups</div>
+        <div class="nav-link"><span class="nav-icon">◈</span>Activity</div>
+        <div class="nav-link"><span class="nav-icon">◇</span>Notifications<span class="nav-badge">3</span></div>
+        <div style="flex:1"></div>
+        <div class="nav-link"><span class="nav-icon">↪</span>Sign out</div>
+      </div>
+      <div style="flex:1;overflow:auto">
+        <div class="page">
+          <div class="page-header">
+            <div><div class="page-title">Good morning, Jane ✦</div><div class="page-sub">Here's your financial snapshot</div></div>
+            <button class="btn btn-primary"><span>+</span> New Group</button>
+          </div>
+          <div class="summary-grid">
+            <div class="summary-card"><div class="sc-label">Net Balance</div><div class="sc-amount green">$47.50</div><div class="sc-sub">you're owed overall</div></div>
+            <div class="summary-card"><div class="sc-label">You're owed</div><div class="sc-amount green">$120.00</div><div class="sc-sub">from others</div></div>
+            <div class="summary-card"><div class="sc-label">You owe</div><div class="sc-amount red">$72.50</div><div class="sc-sub">to others</div></div>
+          </div>
+          <div class="section-title">Your Groups <button class="btn btn-ghost btn-sm">View all</button></div>
+          <div class="groups-grid">
+            <div class="group-card" onclick="show('group')">
+              <div class="gc-head"><div class="gc-icon">B</div><div><div class="gc-name">Bali Trip 2025</div><div class="gc-meta">6 members · 2d ago</div></div></div>
+              <div class="gc-foot">
+                <div class="avatar-stack"><div class="avatar-sm">JD</div><div class="avatar-sm">MK</div><div class="avatar-sm">AS</div><span style="margin-left:10px;font-size:11px;color:var(--text3)">+3</span></div>
+                <div class="red" style="font-size:14px;font-weight:700">$45.00</div>
+              </div>
+            </div>
+            <div class="group-card">
+              <div class="gc-head"><div class="gc-icon">A</div><div><div class="gc-name">Apt 4B Utilities</div><div class="gc-meta">3 members · 1w ago</div></div></div>
+              <div class="gc-foot">
+                <div class="avatar-stack"><div class="avatar-sm">JD</div><div class="avatar-sm">TW</div><div class="avatar-sm">PL</div></div>
+                <div class="green" style="font-size:14px;font-weight:700">$92.50</div>
+              </div>
+            </div>
+            <div class="group-card">
+              <div class="gc-head"><div class="gc-icon">R</div><div><div class="gc-name">Road Trip July</div><div class="gc-meta">4 members · 3w ago</div></div></div>
+              <div class="gc-foot">
+                <div class="avatar-stack"><div class="avatar-sm">JD</div><div class="avatar-sm">CF</div><div class="avatar-sm">KR</div><div class="avatar-sm">+1</div></div>
+                <span class="badge badge-green">Settled</span>
+              </div>
+            </div>
+            <div class="group-card">
+              <div class="gc-head"><div class="gc-icon">W</div><div><div class="gc-name">Wedding Weekend</div><div class="gc-meta">8 members · 5d ago</div></div></div>
+              <div class="gc-foot">
+                <div class="avatar-stack"><div class="avatar-sm">JD</div><div class="avatar-sm">BH</div><div class="avatar-sm">+6</div></div>
+                <div class="red" style="font-size:14px;font-weight:700">$27.50</div>
+              </div>
+            </div>
+          </div>
+          <div class="tip"><span>💡</span><div><strong style="color:var(--amber-light)">You have $72.50 to pay.</strong> <span>Head to a group to mark expenses as settled after paying.</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== GROUP DETAIL ===== -->
+  <div id="screen-group" style="display:none;flex:1">
+    <div style="display:flex;flex:1">
+      <div class="sidebar">
+        <div class="logo"><span class="logo-mark">✦</span><span class="logo-text">SplitEase</span></div>
+        <div class="user-row"><div class="avatar">JD</div><div><div class="user-name">Jane Doe</div><div class="user-email">jane@gmail.com</div></div></div>
+        <div class="divider"></div>
+        <div class="nav-link"><span class="nav-icon">⊞</span>Dashboard</div>
+        <div class="nav-link active"><span class="nav-icon">◎</span>Groups</div>
+        <div class="nav-link"><span class="nav-icon">◈</span>Activity</div>
+        <div class="nav-link"><span class="nav-icon">◇</span>Notifications<span class="nav-badge">3</span></div>
+        <div style="flex:1"></div>
+        <div class="nav-link"><span class="nav-icon">↪</span>Sign out</div>
+      </div>
+      <div style="flex:1;overflow:auto">
+        <div class="page">
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap">
+            <button class="btn btn-ghost" onclick="show('dashboard')" style="padding:7px 10px">←</button>
+            <div style="display:flex;align-items:center;gap:13px;flex:1">
+              <div class="gc-icon" style="width:48px;height:48px;border-radius:14px;font-size:20px">B</div>
+              <div><div style="font-family:var(--font-display);font-size:20px;font-weight:700">Bali Trip 2025</div><div style="font-size:12px;color:var(--text2)">Flights, hotels & adventures ✈️</div></div>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="show('addexpense')"><span>+</span> Add Expense</button>
+            <button class="btn btn-ghost btn-sm">✎</button>
+          </div>
+          <div class="bal-banner neg"><div><strong>$45.00</strong> — you owe in this group</div><span style="font-size:12px;opacity:.8">Mark expenses as settled after paying</span></div>
+          <div class="tabs">
+            <div class="tab active">Expenses</div>
+            <div class="tab">Balances</div>
+            <div class="tab">Members</div>
+          </div>
+          <div class="section-label">Outstanding (3)</div>
+          <div class="expense-row overdue">
+            <div class="er-emoji">🚗</div>
+            <div class="er-info">
+              <div class="er-desc">Airport shuttle (Day 1) <span class="badge badge-red">Overdue</span></div>
+              <div class="er-meta"><span>Paid by Marco</span><span>·</span><span>Mar 15, 2025</span><span>·</span><span class="badge" style="background:var(--bg3);color:var(--text3);font-size:10px;padding:1px 7px">equal</span></div>
+              <div class="er-chips">
+                <span class="chip settled">JD ✓ $18.33</span>
+                <span class="chip me">You $18.33</span>
+                <span class="chip">AS $18.34</span>
+              </div>
+            </div>
+            <div class="er-right">
+              <div class="er-amount">$55.00</div>
+              <div class="er-mine red">you owe $18.33</div>
+              <div class="er-actions"><button class="btn btn-success btn-sm" onclick="show('settle')">Settle</button><button class="btn btn-ghost btn-sm">✎</button><button class="btn btn-ghost btn-sm" style="color:var(--red)">✕</button></div>
+            </div>
+          </div>
+          <div class="expense-row">
+            <div class="er-emoji">🏨</div>
+            <div class="er-info">
+              <div class="er-desc">Villa — Night 1 &amp; 2</div>
+              <div class="er-meta"><span>Paid by you</span><span>·</span><span>Mar 15, 2025</span><span>·</span><span class="badge" style="background:var(--bg3);color:var(--text3);font-size:10px;padding:1px 7px">percentage</span></div>
+              <div class="er-chips">
+                <span class="chip me">You 30% $90</span>
+                <span class="chip">MK 25% $75</span>
+                <span class="chip">AS 25% $75</span>
+                <span class="chip">CF 20% $60</span>
+              </div>
+            </div>
+            <div class="er-right">
+              <div class="er-amount">$300.00</div>
+              <div class="er-mine green">you paid</div>
+              <div class="er-actions"><button class="btn btn-ghost btn-sm">✎</button><button class="btn btn-ghost btn-sm" style="color:var(--red)">✕</button></div>
+            </div>
+          </div>
+          <div class="expense-row">
+            <div class="er-emoji">🍕</div>
+            <div class="er-info">
+              <div class="er-desc">Group dinner — Warung Sopa</div>
+              <div class="er-meta"><span>Paid by Asha</span><span>·</span><span>Mar 16, 2025</span><span>·</span><span class="badge" style="background:var(--bg3);color:var(--text3);font-size:10px;padding:1px 7px">exact</span></div>
+              <div class="er-chips">
+                <span class="chip">JD $35</span>
+                <span class="chip me">You $28</span>
+                <span class="chip">MK $42</span>
+                <span class="chip">CF $15</span>
+              </div>
+            </div>
+            <div class="er-right">
+              <div class="er-amount">$120.00</div>
+              <div class="er-mine red">you owe $28.00</div>
+              <div class="er-actions"><button class="btn btn-success btn-sm" onclick="show('settle')">Settle</button><button class="btn btn-ghost btn-sm">✎</button></div>
+            </div>
+          </div>
+          <div class="section-label" style="margin-top:20px">Settled (1)</div>
+          <div class="expense-row" style="opacity:.55">
+            <div class="er-emoji">✈️</div>
+            <div class="er-info">
+              <div class="er-desc">Flights — Group booking <span class="badge badge-green">Settled</span></div>
+              <div class="er-meta"><span>Paid by you</span><span>·</span><span>Feb 10, 2025</span></div>
+              <div class="er-chips"><span class="chip settled">JD ✓</span><span class="chip settled">MK ✓</span><span class="chip settled">AS ✓</span><span class="chip settled">CF ✓</span></div>
+            </div>
+            <div class="er-right"><div class="er-amount">$2,400.00</div><div class="er-mine green">you paid</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ADD EXPENSE MODAL ===== -->
+  <div id="screen-addexpense" style="display:none;flex:1;align-items:center;justify-content:center;background:rgba(0,0,0,.75);backdrop-filter:blur(8px)">
+    <div class="modal" style="transform:none">
+      <div class="modal-header"><h3>Add Expense</h3><button class="btn btn-ghost btn-sm" onclick="show('group')" style="padding:5px 9px">✕</button></div>
+      <div class="modal-body">
+        <div class="amount-area"><span class="amount-curr">$</span><input class="amount-num" value="55.00" type="number" style="width:140px"/></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+          <div class="field" style="margin:0"><div class="label">Description</div><input class="input" value="Airport shuttle"/></div>
+          <div class="field" style="margin:0"><div class="label">Date</div><input class="input" type="date" value="2025-03-15"/></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+          <div class="field" style="margin:0"><div class="label">Category</div><select class="input"><option>🚗 Transport</option></select></div>
+          <div class="field" style="margin:0"><div class="label">Paid by</div><select class="input"><option>Marco Kern</option></select></div>
+        </div>
+        <div class="label" style="margin-bottom:8px;display:block">How to split</div>
+        <div class="split-grid" style="margin-bottom:16px">
+          <div class="split-btn active"><span class="split-icon">⊜</span><span class="split-label">Split equally</span></div>
+          <div class="split-btn"><span class="split-icon">%</span><span class="split-label">By percentage</span></div>
+          <div class="split-btn"><span class="split-icon">$</span><span class="split-label">Exact amounts</span></div>
+        </div>
+        <div class="label" style="margin-bottom:8px;display:block">Split between</div>
+        <div class="member-row"><div class="check">✓</div><div class="avatar" style="width:26px;height:26px;font-size:10px">JD</div><span class="member-name">Jane Doe (you)</span><span class="member-amt">$18.33</span></div>
+        <div class="member-row"><div class="check">✓</div><div class="avatar" style="width:26px;height:26px;font-size:10px">MK</div><span class="member-name">Marco Kern</span><span class="member-amt">$18.33</span></div>
+        <div class="member-row"><div class="check">✓</div><div class="avatar" style="width:26px;height:26px;font-size:10px">AS</div><span class="member-name">Asha Singh</span><span class="member-amt">$18.34</span></div>
+        <div class="member-row" style="opacity:.45"><div class="check off"></div><div class="avatar" style="width:26px;height:26px;font-size:10px">CF</div><span class="member-name">Cara Fox</span><span style="font-size:11px;color:var(--text3)">excluded</span></div>
+      </div>
+      <div class="modal-footer"><button class="btn btn-ghost" onclick="show('group')">Cancel</button><button class="btn btn-primary">Add expense</button></div>
+    </div>
+  </div>
+
+  <!-- ===== SETTLE MODAL ===== -->
+  <div id="screen-settle" style="display:none;flex:1;align-items:center;justify-content:center;background:rgba(0,0,0,.75);backdrop-filter:blur(8px)">
+    <div class="modal" style="transform:none;max-width:440px">
+      <div class="modal-header"><h3>Settle Up</h3><button class="btn btn-ghost btn-sm" onclick="show('group')" style="padding:5px 9px">✕</button></div>
+      <div class="modal-body">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;margin-bottom:18px">
+          <span style="font-size:14px;font-weight:600">Airport shuttle (Day 1)</span>
+          <span style="font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--text2)">$55.00</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:18px;background:var(--green-dim);border:1px solid rgba(16,185,129,.2);border-radius:12px;margin-bottom:18px;text-align:center">
+          <span style="font-size:11px;color:var(--text2)">Amount to settle</span>
+          <span style="font-family:var(--font-display);font-size:34px;font-weight:700;color:var(--green)">$18.33</span>
+          <span style="font-size:11px;color:var(--text3)">paid to Marco Kern</span>
+        </div>
+        <div class="label" style="margin-bottom:9px;display:block">Payment method</div>
+        <div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px">
+          <div style="padding:7px 13px;border-radius:8px;background:var(--bg3);border:2px solid var(--border);font-size:12px;font-weight:500;color:var(--text2);cursor:pointer;display:flex;gap:5px;align-items:center">💵 Cash</div>
+          <div style="padding:7px 13px;border-radius:8px;background:var(--green-dim);border:2px solid var(--green);font-size:12px;font-weight:500;color:var(--green);cursor:pointer;display:flex;gap:5px;align-items:center">🏦 Bank Transfer</div>
+          <div style="padding:7px 13px;border-radius:8px;background:var(--bg3);border:2px solid var(--border);font-size:12px;font-weight:500;color:var(--text2);cursor:pointer;display:flex;gap:5px;align-items:center">🅿️ PayPal</div>
+          <div style="padding:7px 13px;border-radius:8px;background:var(--bg3);border:2px solid var(--border);font-size:12px;font-weight:500;color:var(--text2);cursor:pointer;display:flex;gap:5px;align-items:center">💙 Venmo</div>
+        </div>
+        <div class="field"><div class="label">Note (optional)</div><input class="input" placeholder="e.g. Sent via bank ref #12345"/></div>
+        <p style="font-size:11px;color:var(--text3);margin-top:8px">⚠️ Make sure you've actually sent the payment before marking as settled.</p>
+      </div>
+      <div class="modal-footer"><button class="btn btn-ghost" onclick="show('group')">Cancel</button><button class="btn btn-success" style="padding:10px 18px;font-size:13px">Mark $18.33 as settled</button></div>
+    </div>
+  </div>
+
+  <!-- ===== ACTIVITY ===== -->
+  <div id="screen-activity" style="display:none;flex:1">
+    <div style="display:flex;flex:1">
+      <div class="sidebar">
+        <div class="logo"><span class="logo-mark">✦</span><span class="logo-text">SplitEase</span></div>
+        <div class="user-row"><div class="avatar">JD</div><div><div class="user-name">Jane Doe</div><div class="user-email">jane@gmail.com</div></div></div>
+        <div class="divider"></div>
+        <div class="nav-link"><span class="nav-icon">⊞</span>Dashboard</div>
+        <div class="nav-link"><span class="nav-icon">◎</span>Groups</div>
+        <div class="nav-link active"><span class="nav-icon">◈</span>Activity</div>
+        <div class="nav-link"><span class="nav-icon">◇</span>Notifications<span class="nav-badge">3</span></div>
+        <div style="flex:1"></div>
+        <div class="nav-link"><span class="nav-icon">↪</span>Sign out</div>
+      </div>
+      <div style="flex:1;overflow:auto">
+        <div class="page">
+          <div class="page-header"><div><div class="page-title">Activity</div><div class="page-sub">All expenses across your groups</div></div></div>
+          <div style="display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap">
+            <div style="padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;background:var(--amber-dim);border:1px solid rgba(245,158,11,.3);color:var(--amber-light);cursor:pointer">All</div>
+            <div style="padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;background:var(--bg3);border:1px solid var(--border);color:var(--text2);cursor:pointer">Unsettled</div>
+            <div style="padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;background:var(--bg3);border:1px solid var(--border);color:var(--text2);cursor:pointer">Settled</div>
+            <div style="padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;background:var(--red-dim);border:1px solid rgba(239,68,68,.2);color:var(--red);cursor:pointer">Overdue (2)</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div class="expense-row" style="border-left:3px solid var(--red);cursor:pointer">
+              <div class="er-emoji">🚗</div>
+              <div class="er-info"><div class="er-desc">Airport shuttle <span class="badge badge-red">Overdue</span></div><div class="er-meta"><span style="color:var(--amber);font-weight:500">Bali Trip</span><span>·</span><span>Marco paid</span><span>·</span><span>3w ago</span></div></div>
+              <div class="er-right"><div class="er-amount">$55.00</div><div class="er-mine red">you owe $18.33</div></div>
+            </div>
+            <div class="expense-row" style="cursor:pointer">
+              <div class="er-emoji">🏨</div>
+              <div class="er-info"><div class="er-desc">Villa — Night 1 &amp; 2</div><div class="er-meta"><span style="color:var(--amber);font-weight:500">Bali Trip</span><span>·</span><span>You paid</span><span>·</span><span>3w ago</span></div></div>
+              <div class="er-right"><div class="er-amount">$300.00</div><div class="er-mine green">you paid</div></div>
+            </div>
+            <div class="expense-row" style="cursor:pointer">
+              <div class="er-emoji">💡</div>
+              <div class="er-info"><div class="er-desc">March electricity</div><div class="er-meta"><span style="color:var(--amber);font-weight:500">Apt 4B Utilities</span><span>·</span><span>Tom paid</span><span>·</span><span>1w ago</span></div></div>
+              <div class="er-right"><div class="er-amount">$180.00</div><div class="er-mine red">you owe $60.00</div></div>
+            </div>
+            <div class="expense-row" style="cursor:pointer;opacity:.6">
+              <div class="er-emoji">⛽</div>
+              <div class="er-info"><div class="er-desc">Gas — Day 2 <span class="badge badge-green">Settled</span></div><div class="er-meta"><span style="color:var(--amber);font-weight:500">Road Trip</span><span>·</span><span>You paid</span><span>·</span><span>1mo ago</span></div></div>
+              <div class="er-right"><div class="er-amount">$64.00</div><div class="er-mine" style="color:var(--text3);text-decoration:line-through;font-size:11px">your $16 paid</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== NOTIFICATIONS ===== -->
+  <div id="screen-notifications" style="display:none;flex:1">
+    <div style="display:flex;flex:1">
+      <div class="sidebar">
+        <div class="logo"><span class="logo-mark">✦</span><span class="logo-text">SplitEase</span></div>
+        <div class="user-row"><div class="avatar">JD</div><div><div class="user-name">Jane Doe</div><div class="user-email">jane@gmail.com</div></div></div>
+        <div class="divider"></div>
+        <div class="nav-link"><span class="nav-icon">⊞</span>Dashboard</div>
+        <div class="nav-link"><span class="nav-icon">◎</span>Groups</div>
+        <div class="nav-link"><span class="nav-icon">◈</span>Activity</div>
+        <div class="nav-link active"><span class="nav-icon">◇</span>Notifications<span class="nav-badge">3</span></div>
+        <div style="flex:1"></div>
+        <div class="nav-link"><span class="nav-icon">↪</span>Sign out</div>
+      </div>
+      <div style="flex:1;overflow:auto">
+        <div class="page">
+          <div class="page-header"><div><div class="page-title">Notifications</div><div class="page-sub">3 unread</div></div><button class="btn btn-ghost btn-sm">Mark all read</button></div>
+          <div class="notif-item unread">
+            <span style="font-size:20px">⏰</span>
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:600;margin-bottom:4px">You have 2 unsettled expenses</div>
+              <div style="font-size:12px;color:var(--text2);margin-bottom:8px">You owe money on 2 expenses that are overdue by more than 2 weeks.</div>
+              <div style="background:var(--bg3);border-radius:8px;padding:8px 10px;margin-bottom:6px;display:flex;flex-direction:column;gap:5px">
+                <div style="display:flex;justify-content:space-between;font-size:11px"><span style="color:var(--text2)">Airport shuttle (Day 1)</span><span style="color:var(--red);font-weight:600">$18.33</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:11px"><span style="color:var(--text2)">Group dinner — Warung Sopa</span><span style="color:var(--red);font-weight:600">$28.00</span></div>
+              </div>
+              <div style="font-size:11px;color:var(--text3)">Today</div>
+            </div>
+            <div class="notif-dot"></div>
+          </div>
+          <div class="notif-item unread">
+            <span style="font-size:20px">⏰</span>
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:600;margin-bottom:4px">You have 1 unsettled expense</div>
+              <div style="font-size:12px;color:var(--text2);margin-bottom:8px">March electricity bill in Apt 4B Utilities is overdue.</div>
+              <div style="background:var(--bg3);border-radius:8px;padding:8px 10px;margin-bottom:6px">
+                <div style="display:flex;justify-content:space-between;font-size:11px"><span style="color:var(--text2)">March electricity</span><span style="color:var(--red);font-weight:600">$60.00</span></div>
+              </div>
+              <div style="font-size:11px;color:var(--text3)">Today</div>
+            </div>
+            <div class="notif-dot"></div>
+          </div>
+          <div class="notif-item" style="opacity:.6">
+            <span style="font-size:20px">⏰</span>
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:600;margin-bottom:4px">You had 1 unsettled expense</div>
+              <div style="font-size:12px;color:var(--text2);margin-bottom:4px">Gas — Day 2 (now settled ✓)</div>
+              <div style="font-size:11px;color:var(--text3)">1 week ago</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:11px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-top:8px">
+            <span style="font-size:18px">💡</span>
+            <div style="font-size:12px;color:var(--text2)"><strong style="color:var(--text2)">Weekly reminders</strong> are sent every Monday for expenses unpaid for more than 2 weeks.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(screen) {
+  document.querySelectorAll('[id^="screen-"]').forEach(el => el.style.display = 'none');
+  const el = document.getElementById('screen-' + screen);
+  if (el) {
+    el.style.display = ['addexpense','settle'].includes(screen) ? 'flex' : 'flex';
+    el.style.flex = '1';
+  }
+  document.querySelectorAll('.screen-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', btn.getAttribute('onclick').includes("'" + screen + "'"));
+  });
+}
+</script>
+</body>
+</html>
