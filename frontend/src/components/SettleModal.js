@@ -11,6 +11,7 @@ const PAYMENT_METHODS = [
 ];
 
 export default function SettleModal({ expense, myUid, isAdmin, onClose, onSaved }) {
+  // eslint-disable-next-line no-unused-vars
   const mySplit = expense.splits.find(s => s.uid === myUid);
   const [paymentMethod, setPaymentMethod] = useState('bank_transfer');
   const [note, setNote] = useState('');

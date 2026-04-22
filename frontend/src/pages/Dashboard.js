@@ -9,7 +9,7 @@ export default function Dashboard() {
   const { user } = useAuth();
   const [summary, setSummary] = useState(null);
   const [groups, setGroups] = useState([]);
-  const [recentExpenses, setRecentExpenses] = useState([]);
+  const [recentExpenses, setRecentExpenses] = useState([]); // eslint-disable-line no-unused-vars
   const [loading, setLoading] = useState(true);
 
   const name = user?.profile?.name || user?.displayName || 'there';

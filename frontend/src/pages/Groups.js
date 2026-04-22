@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../utils/api';
-import { formatCurrency, formatRelative, getInitials } from '../utils/helpers';
+import { formatCurrency, formatRelative } from '../utils/helpers';
 import './Groups.css';
 
 export default function Groups() {
