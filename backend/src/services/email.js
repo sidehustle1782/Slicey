@@ -1,18 +1,25 @@
 const nodemailer = require('nodemailer');
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: parseInt(process.env.SMTP_PORT || '587'),
-  secure: process.env.SMTP_SECURE === 'true',
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
+function createTransporter() {
+  return nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: parseInt(process.env.SMTP_PORT || '587'),
+    secure: process.env.SMTP_SECURE === 'true',
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  });
+}
 
 async function sendInviteEmail({ toEmail, toName, inviterName, groupName, frontendUrl }) {
-  if (!process.env.SMTP_HOST || !process.env.SMTP_USER) return;
+  if (!process.env.SMTP_HOST || !process.env.SMTP_USER) {
+    console.warn('⚠️ Invite email skipped: SMTP_HOST or SMTP_USER not set');
+    return;
+  }
+  console.log(`📧 Sending invite email to ${toEmail}...`);
 
+  const transporter = createTransporter();
   await transporter.sendMail({
     from: process.env.SMTP_FROM || `"Slicey" <${process.env.SMTP_USER}>`,
     to: toEmail,
@@ -32,6 +39,7 @@ async function sendInviteEmail({ toEmail, toName, inviterName, groupName, fronte
       </div>
     `,
   });
+  console.log(`✅ Invite email sent to ${toEmail}`);
 }
 
 module.exports = { sendInviteEmail };

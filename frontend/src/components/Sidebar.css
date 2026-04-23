@@ -129,10 +129,19 @@
     transform: translateX(-100%);
     width: 280px;
     z-index: 200;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
   .sidebar--open { transform: translateX(0); }
   .sidebar-overlay { display: block; }
   .mobile-menu-btn { display: flex; }
+  .sidebar-footer {
+    position: sticky;
+    bottom: 0;
+    background: var(--bg2);
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+    z-index: 1;
+  }
 }
 
 /* Bottom nav for mobile */

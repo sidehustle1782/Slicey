@@ -138,23 +138,22 @@ export default function ExpenseModal({ group, myUid, expense, onClose, onSaved }
             />
           </div>
 
+          <div className="field" style={{ marginBottom: 16 }}>
+            <label className="label">Description *</label>
+            <textarea
+              className="input"
+              placeholder="e.g. Shuttle to airport, dinner at restaurant..."
+              value={description}
+              onChange={e => setDescription(e.target.value)}
+              rows={2}
+              style={{ resize: 'vertical', minHeight: 52 }}
+            />
+          </div>
+
           <div className="grid-2" style={{ marginBottom: 16 }}>
-            <div className="field">
-              <label className="label">Description *</label>
-              <input className="input" placeholder="e.g. Shuttle to airport" value={description} onChange={e => setDescription(e.target.value)} />
-            </div>
             <div className="field">
               <label className="label">Date</label>
               <input className="input" type="date" value={date} onChange={e => setDate(e.target.value)} />
-            </div>
-          </div>
-
-          <div className="grid-2" style={{ marginBottom: 20 }}>
-            <div className="field">
-              <label className="label">Category</label>
-              <select className="input" value={category} onChange={e => setCategory(e.target.value)}>
-                {CATEGORIES.map(c => <option key={c.id} value={c.id}>{c.emoji} {c.label}</option>)}
-              </select>
             </div>
             <div className="field">
               <label className="label">Paid by</label>
@@ -164,6 +163,13 @@ export default function ExpenseModal({ group, myUid, expense, onClose, onSaved }
                 ))}
               </select>
             </div>
+          </div>
+
+          <div className="field" style={{ marginBottom: 20 }}>
+            <label className="label">Category</label>
+            <select className="input" value={category} onChange={e => setCategory(e.target.value)}>
+              {CATEGORIES.map(c => <option key={c.id} value={c.id}>{c.emoji} {c.label}</option>)}
+            </select>
           </div>
 
           {/* Split type */}

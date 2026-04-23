@@ -98,6 +98,10 @@
 .expense-modal input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
 
 @media (max-width: 480px) {
-  .split-type-grid { grid-template-columns: 1fr 1fr 1fr; }
+  .split-type-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .split-type-btn { padding: 10px 4px; }
   .split-type-label { font-size: 10px; }
+  .split-type-icon { font-size: 15px; }
+  .member-split-name { font-size: 12px; }
+  .amount-input { font-size: 28px; }
 }

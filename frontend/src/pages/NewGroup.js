@@ -6,11 +6,22 @@ import toast from 'react-hot-toast';
 import { getInitials } from '../utils/helpers';
 import './NewGroup.css';
 
+const GROUP_CATEGORIES = [
+  { id: 'trip', label: 'Trip', emoji: '✈️' },
+  { id: 'home', label: 'Home', emoji: '🏠' },
+  { id: 'work', label: 'Work', emoji: '💼' },
+  { id: 'dining', label: 'Dining', emoji: '🍽️' },
+  { id: 'sports', label: 'Sports', emoji: '⚽' },
+  { id: 'other', label: 'Other', emoji: '🔖' },
+];
+
 export default function NewGroup() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [category, setCategory] = useState('trip');
+  const [customCategory, setCustomCategory] = useState('');
   const [members, setMembers] = useState([]);
   const [emailInput, setEmailInput] = useState('');
   const [searching, setSearching] = useState(false);
@@ -64,9 +75,11 @@ export default function NewGroup() {
     if (!name.trim()) { toast.error('Group name is required'); return; }
     setSaving(true);
     try {
-      const res = await api.post('/groups', {
+      const finalCategory = category === 'other' ? customCategory.trim() : category;
+    const res = await api.post('/groups', {
         name: name.trim(),
         description: description.trim(),
+        category: finalCategory,
         members: members.map(m => ({ email: m.email, name: m.name })),
       });
       toast.success('Group created!');
@@ -104,7 +117,7 @@ export default function NewGroup() {
             />
           </div>
 
-          <div className="field">
+          <div className="field" style={{ marginBottom: 16 }}>
             <label className="label">Description</label>
             <input
               className="input"
@@ -113,6 +126,26 @@ export default function NewGroup() {
               onChange={e => setDescription(e.target.value)}
               maxLength={200}
             />
+          </div>
+
+          <div className="field">
+            <label className="label">Category</label>
+            <select className="input" value={category} onChange={e => setCategory(e.target.value)}>
+              {GROUP_CATEGORIES.map(c => (
+                <option key={c.id} value={c.id}>{c.emoji} {c.label}</option>
+              ))}
+            </select>
+            {category === 'other' && (
+              <input
+                className="input"
+                style={{ marginTop: 8 }}
+                placeholder="Enter your category..."
+                value={customCategory}
+                onChange={e => setCustomCategory(e.target.value)}
+                maxLength={50}
+                autoFocus
+              />
+            )}
           </div>
         </div>
 

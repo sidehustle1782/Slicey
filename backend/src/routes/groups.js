@@ -24,7 +24,7 @@ async function logActivity(db, { groupId, groupName, type, actorUid, actorName, 
 // Create group
 router.post('/', async (req, res) => {
   const db = getDb();
-  const { name, description, members: memberList = [] } = req.body;
+  const { name, description, category, members: memberList = [] } = req.body;
   // memberList: [{ email, name }]
 
   if (!name) return res.status(400).json({ error: 'Group name is required' });
@@ -52,6 +52,7 @@ router.post('/', async (req, res) => {
       id: groupId,
       name,
       description: description || '',
+      category: category || '',
       createdBy: req.user.uid,
       members,
       memberUids: members.map(m => m.uid),

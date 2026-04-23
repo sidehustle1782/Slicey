@@ -240,19 +240,37 @@ select.input { cursor: pointer; }
   overflow-y: auto;
   box-shadow: var(--shadow-lg);
   animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  flex-direction: column;
 }
 .modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 24px 24px 0;
+  flex-shrink: 0;
 }
-.modal-body { padding: 24px; }
+.modal-body { padding: 24px; flex: 1; overflow-y: auto; }
 .modal-footer {
-  padding: 0 24px 24px;
+  padding: 12px 24px 24px;
   display: flex;
   gap: 10px;
   justify-content: flex-end;
+  flex-shrink: 0;
+  border-top: 1px solid var(--border);
+  background: var(--bg2);
+  position: sticky;
+  bottom: 0;
+}
+
+@media (max-width: 540px) {
+  .modal-overlay { padding: 0; align-items: flex-end; }
+  .modal {
+    border-radius: 20px 20px 0 0;
+    max-height: 92vh;
+    border-bottom: none;
+  }
+  .modal-footer { padding-bottom: max(20px, env(safe-area-inset-bottom)); }
 }
 
 /* Skeleton loader */
