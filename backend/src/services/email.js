@@ -1,27 +1,15 @@
-const nodemailer = require('nodemailer');
-
-function createTransporter() {
-  return nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: parseInt(process.env.SMTP_PORT || '587'),
-    secure: process.env.SMTP_SECURE === 'true',
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-  });
-}
+const { Resend } = require('resend');
 
 async function sendInviteEmail({ toEmail, toName, inviterName, groupName, frontendUrl }) {
-  if (!process.env.SMTP_HOST || !process.env.SMTP_USER) {
-    console.warn('⚠️ Invite email skipped: SMTP_HOST or SMTP_USER not set');
+  if (!process.env.RESEND_API_KEY) {
+    console.warn('⚠️ Invite email skipped: RESEND_API_KEY not set');
     return;
   }
   console.log(`📧 Sending invite email to ${toEmail}...`);
 
-  const transporter = createTransporter();
-  await transporter.sendMail({
-    from: process.env.SMTP_FROM || `"Slicey" <${process.env.SMTP_USER}>`,
+  const resend = new Resend(process.env.RESEND_API_KEY);
+  const { error } = await resend.emails.send({
+    from: process.env.SMTP_FROM || 'Slicey <onboarding@resend.dev>',
     to: toEmail,
     subject: `${inviterName} added you to "${groupName}" on Slicey`,
     html: `
@@ -39,6 +27,11 @@ async function sendInviteEmail({ toEmail, toName, inviterName, groupName, fronte
       </div>
     `,
   });
+
+  if (error) {
+    console.error(`❌ Invite email failed for ${toEmail}:`, error.message);
+    throw new Error(error.message);
+  }
   console.log(`✅ Invite email sent to ${toEmail}`);
 }
 
